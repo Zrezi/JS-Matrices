@@ -134,6 +134,81 @@ function matrixSubtraction(m1, m2) {
 
 }
 
+function matrixDeterminant2x2(matrix, verbose) {
+
+	// Make sure the matrix supplied is in fact a 2x2 matrix
+	if (matrix.rows != 2 || matrix.columns != 2) {
+		console.log('Cannot find 2x2 determinant, matrix isn\'t a 2x2 matrix');
+		return null;
+	}
+
+	// Use the fact that |A| = ad - bc
+	var determinant = (matrix[0][0] * matrix[1][1]) - (matrix[0][1] * matrix[1][0]);
+
+	if (verbose) {
+		console.log(determinant);
+	}
+
+	// Return the determinant value
+	return determinant;
+}
+
+function matrixDeterminantLargerThan2x2(matrix) {
+
+	// Make sure the matrix is square
+	if (matrix.rows != matrix.columns) {
+		console.log('Cannot find larger matrix determinant, matrix isn\' square');
+		return null;
+	}
+
+	var determinant = 0;
+
+	// Going to do this column-based first-row cofactor expansion
+	for (var i = 0; i < matrix[0].length; i++) {
+
+		var m = [];
+
+		for (var k = 0; k < matrix.length; k++) {
+
+			var submatrix = [];
+
+			for (var j = 0; j < matrix[0].length; j++) {
+
+				if (k != 0 && j != i) {
+					submatrix.push(parseInt(matrix[k][j]));
+				}
+
+			}
+
+			if (submatrix.length > 0)
+				m.push(submatrix);
+
+
+		}
+
+		m.rows = m.length;
+		m.columns = m[0].length;
+
+		if (m.rows == 2 && m.columns == 2) {
+			var addition = matrix[0][i] * matrixDeterminant2x2(m);
+			if (i % 2 == 1) {
+				addition *= -1;
+			}
+			determinant += addition;
+		} else {
+			var addition = matrix[0][i] * matrixDeterminantLargerThan2x2(m);
+			if (i % 2 == 1) {
+				addition *= -1;
+			}
+			determinant += addition;
+		}
+
+	}
+
+	return determinant;
+
+}
+
 function generateMatrix_OnesAndZeroes(rows, columns, negatives) {
 
 	// Create the matrix object
@@ -211,16 +286,7 @@ function logMatrix(matrix) {
 
 $(document).ready(function() {
 
-	var m1 = generateMatrix_FromString('{{-300, 50, 3}}');
-	var m2 = generateMatrix_FromString('{{175, 75, 3}}');
-
-	var subtract = matrixSubtraction(m1, m2);
-	var add = matrixAddition(m1, m2);
-
-	console.log('Addition :::');
-	logMatrix(add);
-
-	console.log('Subtraction :::');
-	logMatrix(subtract);
+	var m1 = generateMatrix_FromString('{{1, 2, 3, 4},{2, 3, 4, 1},{3, 4, 1, 2},{9, 9, 9, 8}}');
+	console.log(matrixDeterminantLargerThan2x2(m1));
 
 });
