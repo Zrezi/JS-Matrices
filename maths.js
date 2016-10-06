@@ -167,7 +167,6 @@ function generateMatrix_OnesAndZeroes(rows, columns, negatives) {
 	// Set the matrix object properties
 	matrix.rows = rows;
 	matrix.columns = columns;
-	matrix.negatives = negatives;
 
 	// Return the matrix object
 	return matrix;
